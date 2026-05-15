@@ -4,7 +4,7 @@
 // shared shape -> candidate
 
 export type Candidate = {
-    answer: string;
-    sources: string[];
-    mode: 'web' | 'direct'
+	answer: string;
+	sources: string[];
+	mode: "web" | "direct";
 };

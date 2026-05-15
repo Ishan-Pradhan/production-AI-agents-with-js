@@ -7,13 +7,13 @@
 
 // types in ui -> search the web -> visit every result page -> summarize
 
-import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
-import { webSearch } from "../utils/webSearch";
-import { openUrl } from "../utils/openUrl";
-import { summarize } from "../utils/summarize";
-import { Candidate } from "./types";
-import { getChatModel } from "../shared/models";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
+import { getChatModel } from "../shared/models.js";
+import { openUrl } from "../utils/openUrl.js";
+import { summarize } from "../utils/summarize.js";
+import { webSearch } from "../utils/webSearch.js";
+import type { Candidate } from "./types.js";
 
 const setTopResults = 5;
 
@@ -25,7 +25,7 @@ export const webSearchStep = RunnableLambda.from(
             ...input,
             results,
         };
-    }
+    },
 );
 
 export const openAndSummarizeStep = RunnableLambda.from(
@@ -49,7 +49,7 @@ export const openAndSummarizeStep = RunnableLambda.from(
                     url: opened.url,
                     summary: summarizeContent.summary,
                 };
-            })
+            }),
         );
 
         // status -> fulfilled
@@ -78,7 +78,7 @@ export const openAndSummarizeStep = RunnableLambda.from(
             pageSummaries: settledResultsPageSummaries,
             fallback: "none" as const,
         };
-    }
+    },
 );
 
 // compose step
@@ -101,7 +101,7 @@ export const ComposeStep = RunnableLambda.from(
                     [
                         "You answer briefly and clearly for beginners",
                         "If unsure, say so",
-                    ].join("\n")
+                    ].join("\n"),
                 ),
                 new HumanMessage(input.q),
             ]);
@@ -127,14 +127,14 @@ export const ComposeStep = RunnableLambda.from(
                     "- Be accurate and netral",
                     "- 5-8 sentences max",
                     "- Use only the provided summaries; do not invent new facts",
-                ].join("\n")
+                ].join("\n"),
             ),
             new HumanMessage(
                 [
                     `Question: ${input.q}`,
                     "Summaries:",
                     JSON.stringify(input.pageSummaries, null, 2),
-                ].join("\n")
+                ].join("\n"),
             ),
         ]);
 
@@ -148,7 +148,7 @@ export const ComposeStep = RunnableLambda.from(
             sources: extractSources,
             mode: "web",
         };
-    }
+    },
 );
 
 // LCEL

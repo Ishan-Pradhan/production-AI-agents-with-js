@@ -2,11 +2,11 @@
 // {q, mode -> web | direct}
 
 import { RunnableBranch, RunnableSequence } from "@langchain/core/runnables";
-import { webPath } from "./webPipeline";
-import { directPath } from "./directPipeline";
-import { routerStep } from "./routeStrategy";
-import { finalValidateAndPolish } from "./finalValidate";
-import { SearchInput } from "../utils/schemas";
+import type { SearchInput } from "../utils/schemas.js";
+import { directPath } from "./directPipeline.js";
+import { finalValidateAndPolish } from "./finalValidate.js";
+import { routerStep } from "./routeStrategy.js";
+import { webPath } from "./webPipeline.js";
 
 // web -> webPath
 //directPath
@@ -14,13 +14,17 @@ import { SearchInput } from "../utils/schemas";
 // final validation
 // JSON
 
-const branch = RunnableBranch.from<{ q: string; mode: 'web' | 'direct' }, any>([
-    [(input) => input.mode === 'web', webPath],
-    directPath
-])
+const branch = RunnableBranch.from<{ q: string; mode: "web" | "direct" }, unknown>([
+	[(input) => input.mode === "web", webPath],
+	directPath,
+]);
 
-export const searchChain = RunnableSequence.from([routerStep, branch, finalValidateAndPolish])
+export const searchChain = RunnableSequence.from([
+	routerStep,
+	branch,
+	finalValidateAndPolish,
+]);
 
 export async function runSearch(input: SearchInput) {
-    return await searchChain.invoke(input);
+	return await searchChain.invoke(input);
 }
