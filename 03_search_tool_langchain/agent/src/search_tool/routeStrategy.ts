@@ -7,7 +7,7 @@ export function routeStrategy(q: string): "web" | "direct" {
 	const trimedQuery = q.toLowerCase().trim();
 
 	const isLongQuery = trimedQuery.length > 70;
-	const recentYearRegex = /\b20(2[4-9] |3[0-9])\b/.test(trimedQuery);
+	const recentYearRegex = /\b20(2[3-9] |3[0-9])\b/.test(trimedQuery);
 
 	// this patterns can change based on the toot that you are creating
 	const patterns: RegExp[] = [
