@@ -57,8 +57,7 @@ export function chunkText(text: string, source: string): Document[] {
 
         // next chunk will get the next Id
         chunkId += 1;
-
+        start += step;
     }
-    start += step;
     return docs
 }
