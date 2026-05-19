@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { searchRouter } from "./routes/search_lcel.js";
+import { kbRouter } from "./routes/light_rag_kb.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
 );
 
 app.use("/search", searchRouter);
+app.use("/kb", kbRouter)
 
 const port = process.env.PORT || 5000;
 
