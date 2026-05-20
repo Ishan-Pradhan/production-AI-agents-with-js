@@ -62,3 +62,5 @@ router.post("/approve", async(req,res) =>{
         return res.status(500).json({status: 'error', error: 'Failed to approve agent run'})
     }
 })
+
+export default router;
