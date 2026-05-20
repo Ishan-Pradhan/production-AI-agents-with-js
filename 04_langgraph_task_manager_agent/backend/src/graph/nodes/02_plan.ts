@@ -1,6 +1,7 @@
 import z from "zod";
 import { ChatGroq } from "@langchain/groq";
 import { State } from "../types";
+import { env } from "../../utils/env";
 
 const PlanSchema = z.object({
     steps: z.array(z.string().min(3, "Keep each step a short sentence")).max(150, "Keep each step concise").min(1).max(10),
@@ -10,8 +11,8 @@ type Plan  = z.infer<typeof PlanSchema>
 
 function makeModel(){
     return new ChatGroq({
-        apiKey: process.env.GROQ_API_KEY!,
-        model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+        apiKey: env.GROQ_API_KEY!,
+        model: env.GROQ_MODEL || "llama-3.1-8b-instant",
     })
 }               
    
