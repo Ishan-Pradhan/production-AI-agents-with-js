@@ -49,7 +49,7 @@ function createThreadId(){
 // Function to start a new agent run by invoking the graph with an initial state created from the input string. The function returns either an interrupt object containing the thread ID and steps if the execution is interrupted, or the final state if the execution completes without interruption.
 export async function startAgentRun(input: string):Promise<{interrupt: {threadId: string; steps: string[]}} | {final: State}>{
     const threadId = createThreadId()
-    const config = {configurable: {threadId: threadId}}
+    const config = { configurable: { thread_id: threadId } }
 
     const result: any = await graph.invoke(makeInitialState(input), config)
 
@@ -76,11 +76,10 @@ return{
 // Function to resume an existing agent run by invoking the graph with a command containing the approval status. The function takes a thread ID and an approval boolean as arguments, and returns the final state of the graph after resuming execution. This allows for handling cases where the agent run was interrupted and needs to be continued based on user input or other conditions.
 export async function resumeAgentRun(args: {threadId: string; approve: boolean}): Promise<State>{
     const {threadId, approve} = args
-    const config = {configurable: {threadId}}
+    const config = { configurable: { thread_id: threadId } }
 
     // Resume the graph execution by invoking it with a command that includes the approval status. The graph will continue from the point of interruption, processing the state based on the provided approval value, and ultimately returning the final state after execution.
-    const finalState = (await graph.invoke(new Command({resume: {approve}}),
-config)) as State
+    const finalState = (await graph.invoke(new Command({ resume: { approve } }), config)) as State
 
     return finalState
 }
